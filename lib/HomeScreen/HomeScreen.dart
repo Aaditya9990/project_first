@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:project_first/api/remote_servies.dart';
 
+import '../api/item_list.dart';
 import 'list_item.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -10,6 +12,25 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+
+  ItemList? itemList;
+  var isLoader = false;
+
+  @override
+  void initState(){
+    super.initState();
+    getData();
+  }
+
+  getData() async{
+    itemList = (await RemoteServies().fetchUser());
+    if(itemList != null){
+      setState(() {
+        isLoader = true;
+      });
+    }
+  }
 
   int? selectIndex;
   int? selectDate;
@@ -49,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Container(
           margin: EdgeInsets.only(top: 10),
           child: Text(
-            "October 2024",
+            itemList?.data[0].firstName ?? "",
             style: TextStyle(
               fontSize: 20,
               color: Colors.black87,
@@ -88,9 +109,11 @@ class _HomeScreenState extends State<HomeScreen> {
           return FittedBox(
             child: GestureDetector(
               onTap: () {
-                setState(() {
-                  selectIndex = (selectIndex == index) ? null : index;
-                });
+              /*  setState(() {
+
+                });*/
+
+                selectIndex = (selectIndex == index) ? null : index;
               },
               child: Container(
                 margin: EdgeInsets.only(left: 10, top: 10),
