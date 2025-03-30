@@ -16,4 +16,5 @@ class RemoteServies{
     } else {
       throw Exception('Failed to load items');
     }
-  }}
+  }
+}

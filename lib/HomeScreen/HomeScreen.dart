@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:project_first/api/remote_servies.dart';
 
-import '../api/item_list.dart';
+import 'api/item_list.dart';
+import 'api/remote_servies.dart';
 import 'list_item.dart';
 
 class HomeScreen extends StatefulWidget {
