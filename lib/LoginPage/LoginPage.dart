@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project_first/HomeScreen/HomeScreen.dart';
 
-import 'login_api/login_model.dart';
 import 'login_api/postapi.dart';
 
 class LoginPage extends StatefulWidget {
@@ -14,27 +13,23 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   bool passwordVisble = false;
   var emailController = TextEditingController();
-  var passController = TextEditingController();
+  var passwordController = TextEditingController();
+
 
   @override
   void initState() {
     super.initState();
-
     passwordVisble = true;
   }
 
-  bool isloader = false;
 
-  getPostData(String userName, String password) async {
-    var loginModel = await PostApi().postUser(userName, password);
+  getPostData(String username, String password) async {
+    var loginModel = await PostApi().postUser(username,password);
 
-    if (loginModel.success) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => HomeScreen()),
-      );
+    if(loginModel.success){
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen(),));
     }else{
-      print("Login Failure");
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("login failed")));
     }
   }
 
@@ -57,8 +52,8 @@ class _LoginPageState extends State<LoginPage> {
             ),
             Text("Password"),
             TextField(
+              controller: passwordController,
               obscureText: passwordVisble,
-              controller: passController,
               decoration: InputDecoration(
                 hintText: "Password",
                 suffixIcon: IconButton(
@@ -80,6 +75,7 @@ class _LoginPageState extends State<LoginPage> {
             ElevatedButton(
               onPressed: () {
                 validation();
+
               },
               style: ButtonStyle(
                 shape: WidgetStatePropertyAll(
@@ -95,16 +91,22 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void validation() {
+  void validation(){
     var userName = emailController.text.trim();
-    var pass = passController.text.trim();
+    var pass = passwordController.text.trim();
 
-    if (userName.isEmpty) {
-      print("Please enter user name");
-    } else if (pass.isEmpty) {
-      print("Please enter password");
-    } else {
-      getPostData(userName, pass);
+    if(userName.isEmpty){
+      print("please enter username");
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("please enter Username")));
+
+    }else  if(pass.isEmpty){
+      print("please enter password");
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("please enter password")));
+    }else{
+      getPostData(userName,pass);
+
     }
+
   }
+
 }
